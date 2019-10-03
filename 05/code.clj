@@ -85,6 +85,11 @@ great-baby-name
 (c-dex character)
 ; => 5
 
+(defn attr
+ [attr char] 
+ (get-in char [:attributes attr]))
+(attr :intelligence character)
+
 
 (fn [c] (:strength (:attributes c)))
 
@@ -196,3 +201,42 @@ great-baby-name
 
 (characters-as-strings "a   cb")
 ; => ("a" "c" "b")
+
+
+(defn my-comp
+  "compose multiple functions together"
+  ([] identity)
+  ([f] f)
+  ([f & g]
+    (fn [& args] 
+      (let [fns (cons f (or g []))]
+        (reduce (fn [accum next-fn]
+                  (next-fn accum))
+          (apply (last fns) args)
+          (rest (reverse fns)))))))
+
+(defn my-assoc-in
+  [m [k & ks] v]
+  (assoc m k  (reduce (fn 
+                        [map value] 
+                        (assoc {} value map)) 
+                      (conj (reverse ks) v)))
+  )#'user/my-assoc-in
+
+
+(def player1 {:name "Player 1" :attribs {:str 10 :int 11 :wis 12}})
+
+(update player1 :attribs #(update % :str inc))
+(update-in player1 [:attribs :str] inc)
+
+
+(defn my-update-in
+  ([m [k & ks] f]
+   (if (empty? ks)
+     (update m k f) 
+     (update m k (fn 
+                  [map] 
+                  (my-update-in map ks f))))))
+  
+(my-update-in player1 [:attribs :str] inc)
+(my-update-in [1 {:a 2 :b 3 :c 4}] [1 :c] (fnil inc 5))

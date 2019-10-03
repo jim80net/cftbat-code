@@ -1,3 +1,4 @@
+(ns user)
 (ns-name *ns*)
 ; => user
 
