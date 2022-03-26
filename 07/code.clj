@@ -5,6 +5,8 @@
 (backwards (" backwards" " am" "I" str))
 ; => "I am backwards"
 
+(backwards (" asdf" " qwer" str))
+
 
 (def addition-list (list + 1 2))
 (eval addition-list)
@@ -85,9 +87,9 @@ if
   (+ x 3))
 ; => 8
 
-(let [x 5]
-  (let [x 6]
-    (+ x 3)))
+(+ (let [x 5]
+     (let [x 6]
+       (+ x 3) )))
 ; => 9
 
 (defn exclaim
@@ -164,7 +166,7 @@ if
   [infixed]
   (list (second infixed) 
         (first infixed) 
-        (last infixed)))
+        (last infixed)))
 
 (infix (1 + 2))
 ; => 3
